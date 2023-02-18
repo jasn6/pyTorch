@@ -3,7 +3,7 @@ from torch.utils.data import Dataset #  allow you to use pre-loaded datasets as 
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 import matplotlib.pyplot as plt
-
+from torch.utils.data import DataLoader
 
 # Dataset stores the samples and their corresponding labels
 # Using FashionMNIST Dataset a dataset of Zalando’s article 
@@ -49,3 +49,19 @@ for i in range(1, cols * rows + 1):
     plt.axis("off")
     plt.imshow(img.squeeze(), cmap="gray")
 plt.show()
+
+# DataLoader wraps an iterable around the Dataset to enable easy access to the samples.
+# load datasets into the DataLoader, which will now allow us to iterate through the dataset as needed
+train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
+# shuffle=True, after we iterate over all batches 
+# the data is shuffled (for finer-grained control over the data loading order).
+test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
+
+train_features, train_labels = next(iter(train_dataloader))
+print(f"Feature batch shape: {train_features.size()}")
+print(f"Labels batch shape: {train_labels.size()}")
+img = train_features[0].squeeze()
+label = train_labels[0]
+plt.imshow(img, cmap="gray")
+plt.show()
+print(f"Label: {label}")
